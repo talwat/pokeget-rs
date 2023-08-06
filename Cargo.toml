@@ -1,0 +1,20 @@
+[package]
+name = "pokeget"
+author = "talwat"
+version = "1.0.0"
+edition = "2021"
+license-file = "LICENSE"
+readme = "README.md"
+documentation = "https://github.com/talwat/showie"
+homepage = "https://github.com/talwat/showie"
+repository = "https://github.com/talwat/showie"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+bytes = "1.4.0"
+clap = { version = "4.3.19", features = ["derive"] }
+image = { version = "0.24.6", default-features = false, features = ["png", "rgb"] }
+rand = "0.8.5"
+reqwest = { version = "0.11", features = ["blocking"] }
+showie = "1.0.0"

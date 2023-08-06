@@ -1,0 +1,57 @@
+environment:
+  properties:
+    artifactsDir: out/jreleaser/assemble/pokeget/bin
+
+project:
+  name: pokeget
+  description: A better rust version of pokeget.
+  longDescription: A better rust version of pokeget.
+  links:
+    homepage: https://github.com/talwat/pokeget-rs
+  authors:
+    - talwat
+  license: MIT
+  inceptionYear: "20223"
+  stereotype: CLI
+
+platform:
+  replacements:
+    'osx-x86_64': 'x86_64-apple-darwin'
+    'osx-aarch_64': 'aarch64-apple-darwin'
+    'linux-x86_64': 'x86_64-unknown-linux-gnu'
+    'linux-aarch_64': 'aarch64-unknown-linux-gnu'
+    'windows-x86_64': 'x86_64-pc-windows-msvc'
+
+release:
+  github:
+    name: pokeget
+    overwrite: true
+
+assemble:
+  archive:
+    helloworld:
+      active: ALWAYS
+      attachPlatform: true
+      fileSets:
+        - input: 'target/{{ osPlatformReplaced }}/release'
+          output: 'bin'
+          includes: [ 'pokeget{.exe,}' ]
+        - input: '.'
+          includes: [ 'LICENSE' ]
+
+distributions:
+  pokeget:
+    type: BINARY
+    executable:
+      windowsExtension: exe
+    artifacts:
+      - path: '{{artifactsDir}}-{{projectVersion}}-aarch64-apple-darwin'
+        platform: 'osx-aarch_64'
+      - path: '{{artifactsDir}}-{{projectVersion}}-x86_64-apple-darwin'
+        platform: 'osx-x86_64'
+      - path: '{{artifactsDir}}-{{projectVersion}}-x86_64-pc-windows-msvc'
+        platform: 'windows-x86_64'
+      - path: '{{artifactsDir}}-{{projectVersion}}-x86_64-unknown-linux-gnu'
+        platform: 'linux-x86_64'
+      - path: '{{artifactsDir}}-{{projectVersion}}-aarch64-unknown-linux-gnu'
+        platform: 'linux-aarch_64'

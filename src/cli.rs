@@ -1,5 +1,3 @@
-//! Display pokemon sprites in your terminal.
-
 use clap::Parser;
 
 #[derive(Parser, Debug)]

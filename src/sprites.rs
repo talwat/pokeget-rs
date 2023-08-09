@@ -2,14 +2,19 @@ use std::process::exit;
 
 use image::{DynamicImage, GenericImage};
 
-use crate::{cli::Args, utils::random, Data};
+use crate::{utils::random, Data};
 
 /// Fetches a sprite and returns a vector of bytes.
-pub fn get_sprite(pokemon: &str, form: &String, shiny: bool) -> Vec<u8> {
+/// This will also format the names properly.
+pub fn get_sprite(pokemon: &str, form: &String, shiny: bool, list: &[&str]) -> Vec<u8> {
     let mut filename = pokemon.to_owned();
     if !form.is_empty() {
         filename.push('-');
         filename.push_str(form);
+    }
+
+    if let Ok(pokedex_id) = filename.parse::<usize>() {
+        filename = String::from(list[pokedex_id-1]);
     }
 
     // I hate Mr. Mime and Farfetch'd.
@@ -33,7 +38,7 @@ pub fn get_sprite(pokemon: &str, form: &String, shiny: bool) -> Vec<u8> {
 }
 
 /// Combines several sprites into one by stitching them horizontally.
-pub fn combine_sprites(combined_width: u32, combined_height: u32, sprites: &Vec<DynamicImage>) -> DynamicImage {
+pub fn combine_sprites(combined_width: u32, combined_height: u32, sprites: &[DynamicImage]) -> DynamicImage {
     let mut combined = DynamicImage::new_rgba8(combined_width - 1, combined_height);
     let mut shift = 0;
 
@@ -48,16 +53,19 @@ pub fn combine_sprites(combined_width: u32, combined_height: u32, sprites: &Vec<
 }
 
 /// Loops through all the pokemon specified in the args and returns a vector of images.
-pub fn get_sprites(args: &Args, form: &String, list: &Vec<&str>) -> (u32, u32, Vec<DynamicImage>) {
+/// This will also format the names properly.
+pub fn get_sprites(pokemons: &mut [String], shiny: bool, form: &String, list: &[&str]) -> (u32, u32, Vec<DynamicImage>) {
     let mut sprites = Vec::new();
     let mut combined_width: u32 = 0;
     let mut combined_height: u32 = 0;
 
-    for pokemon in &args.pokemon {
+    for pokemon in pokemons.iter_mut() {
         let bytes = if pokemon == "random" {
-            get_sprite(&random(list), &String::new(), args.shiny)
+            *pokemon = random(list);
+
+            get_sprite(pokemon, &String::new(), shiny, list)
         } else {
-            get_sprite(pokemon, form, args.shiny)
+            get_sprite(pokemon, form, shiny, list)
         };
 
         let img = image::load_from_memory(&bytes).unwrap();

@@ -13,9 +13,13 @@ repository = "https://github.com/talwat/showie"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+Inflector = { version = "0.11.4", default-features = false }
 bytes = "1.4.0"
 clap = { version = "4.3.19", features = ["derive"] }
-image = { version = "0.24.6", default-features = false, features = ["png", "rgb"] }
+image = { version = "0.24.6", default-features = false, features = [
+    "png",
+    "rgb",
+] }
 rand = "0.8.5"
 reqwest = { version = "0.11", features = ["blocking"] }
 rust-embed = { version = "6.8.1", features = ["include-exclude"] }

@@ -22,6 +22,12 @@ and dex id's work too:
 
 ## Installation
 
+If you're on arch, you can use the AUR:
+
+```sh
+yay -S pokeget
+```
+
 You can either use cargo by doing:
 
 ```sh

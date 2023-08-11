@@ -25,6 +25,8 @@ pub fn get_form(args: &Args) -> String {
         String::from("hisue")
     } else if args.noble {
         String::from("hisue-noble")
+    } else if args.galar {
+        String::from("galar")
     } else {
         args.form.clone()
     }

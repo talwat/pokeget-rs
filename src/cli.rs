@@ -41,4 +41,8 @@ pub struct Args {
     /// Display the hisue noble variant of the pokemon
     #[arg(short, long, default_value_t = false)]
     pub noble: bool,
+
+    /// Display the galarian variant of the pokemon
+    #[arg(long, default_value_t = false)]
+    pub galar: bool,
 }

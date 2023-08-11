@@ -6,7 +6,7 @@ use crate::{utils::random, Data};
 
 /// Fetches a sprite and returns a vector of bytes.
 /// This will also format the names properly.
-pub fn get_sprite(pokemon: &str, form: &String, shiny: bool, list: &[&str]) -> Vec<u8> {
+pub fn get_sprite(pokemon: &str, form: &String, shiny: bool, female: bool, list: &[&str]) -> Vec<u8> {
     let mut filename = pokemon.to_owned();
     if !form.is_empty() {
         filename.push('-');
@@ -24,8 +24,9 @@ pub fn get_sprite(pokemon: &str, form: &String, shiny: bool, list: &[&str]) -> V
         .to_lowercase();
 
     let path = &format!(
-        "pokesprite/pokemon-gen8/{}/{filename}.png",
-        if shiny { "shiny" } else { "regular" }
+        "pokesprite/pokemon-gen8/{}/{}{filename}.png",
+        if shiny { "shiny" } else { "regular" },
+        if female { "female/" } else { "" }
     );
 
     Data::get(path)
@@ -54,7 +55,7 @@ pub fn combine_sprites(combined_width: u32, combined_height: u32, sprites: &[Dyn
 
 /// Loops through all the pokemon specified in the args and returns a vector of images.
 /// This will also format the names properly.
-pub fn get_sprites(pokemons: &mut [String], shiny: bool, form: &String, list: &[&str]) -> (u32, u32, Vec<DynamicImage>) {
+pub fn get_sprites(pokemons: &mut [String], shiny: bool, female: bool, form: &String, list: &[&str]) -> (u32, u32, Vec<DynamicImage>) {
     let mut sprites = Vec::new();
     let mut combined_width: u32 = 0;
     let mut combined_height: u32 = 0;
@@ -63,9 +64,9 @@ pub fn get_sprites(pokemons: &mut [String], shiny: bool, form: &String, list: &[
         let bytes = if pokemon == "random" {
             *pokemon = random(list);
 
-            get_sprite(pokemon, &String::new(), shiny, list)
+            get_sprite(pokemon, &String::new(), shiny, female, list)
         } else {
-            get_sprite(pokemon, form, shiny, list)
+            get_sprite(pokemon, form, shiny, female, list)
         };
 
         let img = image::load_from_memory(&bytes).unwrap();

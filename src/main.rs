@@ -26,7 +26,7 @@ fn main() {
 
     let mut pokemons = args.pokemon;
 
-    let (width, height, sprites) = get_sprites(&mut pokemons, args.shiny, &form, &list);
+    let (width, height, sprites) = get_sprites(&mut pokemons, args.shiny, args.female, &form, &list);
     let combined = combine_sprites(width, height, &sprites);
 
     eprintln!(

@@ -34,6 +34,8 @@ You can either use cargo by doing:
 cargo install pokeget
 ```
 
+and making sure `$HOME/.cargo/bin` is added to `$PATH`.
+
 or clone the repository and compiling manually by doing:
 
 ```sh
@@ -41,6 +43,26 @@ git clone --recurse-submodules https://github.com/talwat/pokeget-rs.git
 cd pokeget-rs
 cargo build --release
 mv target/release/pokeget ~/.local/bin
+```
+
+and making sure `$HOME/.local/bin` is added to `$PATH`.
+
+### Adding a directory to $PATH
+
+#### Bash & Zsh
+
+Append this to your `.bashrc` or `.zshrc`:
+
+```sh
+export PATH="<path>:$PATH"
+```
+
+#### Fish
+
+Run this in your CLI:
+
+```sh
+fish_add_path <path>
 ```
 
 ## Why?

@@ -71,6 +71,11 @@ Gone. Reduced to atoms.
 
 In all seriousness, i've just decided to not deal with them since it's extra work that I don't want to deal with.
 
+## Installing with cargo
+Make sure that `$HOME/.cargo/bin` is added to $PATH. If not, paste the following in you `.bashrc`
+```sh
+export PATH=$PATH:$HOME/.cargo/bin
+```
 ## Credits
 
 This time, the sprites are from [pokesprite](https://github.com/msikma/pokesprite) and pokeget uses them with a submodule.

@@ -1,6 +1,16 @@
 //! Display pokemon sprites in your terminal.
 
-#![warn(clippy::all, clippy::restriction, clippy::pedantic, clippy::nursery)]
+#![warn(
+    clippy::all,
+    clippy::correctness,
+    clippy::suspicious,
+    clippy::style,
+    clippy::complexity,
+    clippy::perf,
+    clippy::pedantic,
+    clippy::restriction,
+    clippy::nursery
+)]
 
 use clap::Parser;
 use inflector::Inflector;
@@ -26,7 +36,8 @@ fn main() {
 
     let mut pokemons = args.pokemon;
 
-    let (width, height, sprites) = get_sprites(&mut pokemons, args.shiny, args.female, &form, &list);
+    let (width, height, sprites) =
+        get_sprites(&mut pokemons, args.shiny, args.female, &form, &list);
     let combined = combine_sprites(width, height, &sprites);
 
     eprintln!(
@@ -34,7 +45,8 @@ fn main() {
         pokemons
             .iter()
             .enumerate()
-            .map(|(i, x)| x.to_title_case().replace('-', " ") + if i != pokemons.len()-1 { ", " } else { "" })
+            .map(|(i, x)| x.to_title_case().replace('-', " ")
+                + if i != pokemons.len() - 1 { ", " } else { "" })
             .collect::<String>()
     );
     println!("{}", showie::to_ascii(&combined));

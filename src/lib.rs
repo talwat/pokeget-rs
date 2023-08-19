@@ -1,7 +1,7 @@
 use rust_embed::RustEmbed;
 
-pub mod sprites;
 pub mod cli;
+pub mod sprites;
 pub mod utils;
 
 #[derive(RustEmbed)]

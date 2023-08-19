@@ -6,9 +6,9 @@ edition = "2021"
 description = "Display pokemon sprites in your terminal."
 license-file = "LICENSE"
 readme = "README.md"
-documentation = "https://github.com/talwat/showie"
-homepage = "https://github.com/talwat/showie"
-repository = "https://github.com/talwat/showie"
+documentation = "https://github.com/talwat/pokeget-rs"
+homepage = "https://github.com/talwat/pokeget-rs"
+repository = "https://github.com/talwat/pokeget-rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

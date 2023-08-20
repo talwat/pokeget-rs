@@ -7,20 +7,32 @@ use crate::{utils::random, Data};
 /// Fetches a sprite and returns a vector of bytes.
 /// This will also format the names properly.
 pub fn get_sprite(
-    pokemon: &str,
+    pokemon: &mut String,
     form: &String,
     shiny: bool,
     female: bool,
     list: &[&str],
 ) -> Vec<u8> {
-    let mut filename = pokemon.to_owned();
-    if !form.is_empty() {
-        filename.push('-');
-        filename.push_str(form);
+    if let Ok(pokedex_id) = pokemon.parse::<usize>() {
+        if pokedex_id == 0 {
+            *pokemon = String::from("random");
+        } else {
+            *pokemon = String::from(list[pokedex_id - 1]);
+        }
     }
 
-    if let Ok(pokedex_id) = filename.parse::<usize>() {
-        filename = String::from(list[pokedex_id - 1]);
+    let is_random = pokemon == "random";
+
+    if is_random {
+        *pokemon = random(list);
+    }
+
+    let mut filename = pokemon.to_owned();
+
+    // The form shouldn't be applied to random pokemon.
+    if !form.is_empty() && !is_random {
+        filename.push('-');
+        filename.push_str(form);
     }
 
     // I hate Mr. Mime and Farfetch'd.
@@ -32,7 +44,7 @@ pub fn get_sprite(
     let path = &format!(
         "pokesprite/pokemon-gen8/{}/{}{filename}.png",
         if shiny { "shiny" } else { "regular" },
-        if female { "female/" } else { "" }
+        if female && !is_random { "female/" } else { "" } // Random pokemon also shouldn't follow the female rule.
     );
 
     Data::get(path)
@@ -77,13 +89,7 @@ pub fn get_sprites(
     let mut combined_height: u32 = 0;
 
     for pokemon in pokemons.iter_mut() {
-        let bytes = if pokemon == "random" {
-            *pokemon = random(list);
-
-            get_sprite(pokemon, &String::new(), shiny, female, list)
-        } else {
-            get_sprite(pokemon, form, shiny, female, list)
-        };
+        let bytes = get_sprite(pokemon, form, shiny, female, list);
 
         let img = image::load_from_memory(&bytes).unwrap();
         let trimmed = showie::trim(&img);

@@ -16,10 +16,8 @@ pub fn get_sprite(
     if let Ok(pokedex_id) = pokemon.parse::<usize>() {
         if pokedex_id == 0 {
             *pokemon = String::from("random");
-        } else {
-            if list.len() >= pokedex_id {
-                *pokemon = String::from(list[pokedex_id - 1]);
-            }
+        } else if list.len() >= pokedex_id {
+            *pokemon = String::from(list[pokedex_id - 1]);
         }
     }
 

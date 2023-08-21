@@ -17,7 +17,9 @@ pub fn get_sprite(
         if pokedex_id == 0 {
             *pokemon = String::from("random");
         } else {
-            *pokemon = String::from(list[pokedex_id - 1]);
+            if list.len() >= pokedex_id {
+                *pokemon = String::from(list[pokedex_id - 1]);
+            }
         }
     }
 

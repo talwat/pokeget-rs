@@ -20,6 +20,10 @@ use pokeget::utils::get_form;
 use pokeget::Data;
 use std::process::exit;
 
+fn format_name(name: &String) -> String {
+    name.to_title_case().replace('-', " ")
+}
+
 fn main() {
     let file = Data::get("pokemon.txt").unwrap();
     let raw = core::str::from_utf8(file.data.as_ref()).unwrap();
@@ -45,8 +49,7 @@ fn main() {
         pokemons
             .iter()
             .enumerate()
-            .map(|(i, x)| x.to_title_case().replace('-', " ")
-                + if i != pokemons.len() - 1 { ", " } else { "" })
+            .map(|(i, x)| format_name(x) + if i != pokemons.len() - 1 { ", " } else { "" })
             .collect::<String>()
     );
     println!("{}", showie::to_ascii(&combined));

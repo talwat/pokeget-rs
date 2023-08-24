@@ -47,6 +47,10 @@ mv target/release/pokeget ~/.local/bin
 
 and making sure `$HOME/.local/bin` is added to `$PATH`.
 
+## Updating
+
+Just rerun `cargo install pokeget` or `git pull` on the repository and then recompile.
+
 ### Adding a directory to $PATH
 
 #### Bash & Zsh

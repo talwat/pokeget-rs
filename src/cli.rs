@@ -7,7 +7,7 @@ pub struct Args {
     pub pokemon: Vec<String>,
 
     /// Whether to hide the pokemon's name which appears above it
-    #[arg(short, long, default_value_t = false)]
+    #[arg(long, default_value_t = false)]
     pub hide_name: bool,
 
     /// The form of the pokemon

@@ -43,14 +43,17 @@ fn main() {
     let (width, height, sprites) =
         get_sprites(&mut pokemons, args.shiny, args.female, &form, &list);
     let combined = combine_sprites(width, height, &sprites);
+    
+    if !args.hide_name {
+        eprintln!(
+            "{}\n",
+            pokemons
+                .iter()
+                .enumerate()
+                .map(|(i, x)| format_name(x) + if i != pokemons.len() - 1 { ", " } else { "" })
+                .collect::<String>()
+        );
+    }
 
-    eprintln!(
-        "{}\n",
-        pokemons
-            .iter()
-            .enumerate()
-            .map(|(i, x)| format_name(x) + if i != pokemons.len() - 1 { ", " } else { "" })
-            .collect::<String>()
-    );
     println!("{}", showie::to_ascii(&combined));
 }

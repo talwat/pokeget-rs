@@ -77,6 +77,8 @@ pub fn combine_sprites(
 
 /// Loops through all the pokemon specified in the args and returns a vector of images.
 /// This will also format the names properly.
+/// 
+/// Mutable access to `pokemons` is required to edit the names of random pokemon so they can be displayed.
 pub fn get_sprites(
     pokemons: &mut [String],
     shiny: bool,

@@ -6,6 +6,10 @@ pub struct Args {
     /// The pokemon to display, use "random" to get a random pokemon
     pub pokemon: Vec<String>,
 
+    /// Whether to hide the pokemon's name which appears above it
+    #[arg(short, long, default_value_t = false)]
+    pub hide_name: bool,
+
     /// The form of the pokemon
     #[arg(short, long, default_value = "")]
     pub form: String,

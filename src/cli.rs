@@ -38,11 +38,11 @@ pub struct Args {
     #[arg(short, long, default_value_t = false)]
     pub gmax: bool,
 
-    /// Display the hisue variant of the pokemon
+    /// Display the hisui variant of the pokemon
     #[arg(long, default_value_t = false)]
-    pub hisue: bool,
+    pub hisui: bool,
 
-    /// Display the hisue noble variant of the pokemon
+    /// Display the noble variant of the pokemon, this option often times only works in tandom with --hisui.
     #[arg(short, long, default_value_t = false)]
     pub noble: bool,
 

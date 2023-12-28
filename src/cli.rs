@@ -53,4 +53,8 @@ pub struct Args {
     /// Display the female variant of the pokemon if it exists. This doesn't apply to nidoran, for some reason.
     #[arg(long, default_value_t = false)]
     pub female: bool,
+
+    /// Display older gen7 sprite if available
+    #[arg(long, default_value_t = false)]
+    pub gen7: bool,
 }

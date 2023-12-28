@@ -1,7 +1,7 @@
 [package]
 name = "pokeget"
 authors = [ "talwat" ]
-version = "1.4.0"
+version = "1.5.0"
 edition = "2021"
 description = "Display pokemon sprites in your terminal."
 license = "MIT"

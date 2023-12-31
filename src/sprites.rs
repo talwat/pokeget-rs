@@ -11,6 +11,7 @@ pub fn get_sprite(
     form: &String,
     shiny: bool,
     female: bool,
+    gen7: bool,
     list: &[&str],
 ) -> Vec<u8> {
     if let Ok(pokedex_id) = pokemon.parse::<usize>() {
@@ -41,13 +42,31 @@ pub fn get_sprite(
         .replace(['.', '\'', ':'], "")
         .to_lowercase();
 
-    let path = &format!(
-        "pokesprite/pokemon-gen8/{}/{}{filename}.png",
-        if shiny { "shiny" } else { "regular" },
-        if female && !is_random { "female/" } else { "" } // Random pokemon also shouldn't follow the female rule.
-    );
+    let mut path = String::new();
 
-    Data::get(path)
+    // Try gen7x first then fall back to gen8
+    for gen in IntoIterator::into_iter(["gen7x", "gen8"]) {
+
+        // Skip gen7x folder if checking gen7 is disabled
+        if !gen7 && gen == "gen7x" {
+            continue;
+        }
+
+        let m_path = &format!(
+            "pokesprite/pokemon-{}/{}/{}{filename}.png",
+            gen,
+            if shiny { "shiny" } else { "regular" },
+            if female && !is_random { "female/" } else { "" } // Random pokemon also shouldn't follow the female rule.
+        );
+
+        // If found a valid sprite, set the path
+        if Data::get(m_path).is_some() {
+            path = m_path.to_owned();
+            break;
+        }
+    }
+
+    Data::get(path.as_str())
         .unwrap_or_else(|| {
             eprintln!("pokemon not found");
             exit(1);
@@ -83,6 +102,7 @@ pub fn get_sprites(
     pokemons: &mut [String],
     shiny: bool,
     female: bool,
+    gen7: bool,
     form: &String,
     list: &[&str],
 ) -> (u32, u32, Vec<DynamicImage>) {
@@ -91,7 +111,7 @@ pub fn get_sprites(
     let mut combined_height: u32 = 0;
 
     for pokemon in pokemons.iter_mut() {
-        let bytes = get_sprite(pokemon, form, shiny, female, list);
+        let bytes = get_sprite(pokemon, form, shiny, female, gen7, list);
 
         let img = image::load_from_memory(&bytes).unwrap();
         let trimmed = showie::trim(&img);

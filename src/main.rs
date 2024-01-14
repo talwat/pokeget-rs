@@ -25,9 +25,7 @@ fn format_name(name: &String) -> String {
 }
 
 fn main() {
-    let file = Data::get("pokemon.txt").unwrap();
-    let raw = core::str::from_utf8(file.data.as_ref()).unwrap();
-    let list: Vec<&str> = raw.split('\n').collect();
+    let pokemon_list: Box<[&'static str]> = include_str!("../data/pokemon.txt").split('\n').collect();
 
     let args = Args::parse();
 
@@ -41,7 +39,7 @@ fn main() {
     let mut pokemons = args.pokemon;
 
     let (width, height, sprites) =
-        get_sprites(&mut pokemons, args.shiny, args.female, &form, &list);
+        get_sprites(&mut pokemons, args.shiny, args.female, &form, &pokemon_list);
     let combined = combine_sprites(width, height, &sprites);
 
     if !args.hide_name {

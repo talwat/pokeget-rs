@@ -5,7 +5,5 @@ pub mod sprites;
 pub mod utils;
 
 #[derive(RustEmbed)]
-#[folder = "data/"]
-#[include = "pokesprite/pokemon-gen8/*"]
-#[include = "pokemon.txt"]
+#[folder = "data/pokesprite/pokemon-gen8"]
 pub struct Data;

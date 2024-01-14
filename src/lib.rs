@@ -6,4 +6,5 @@ pub mod utils;
 
 #[derive(RustEmbed)]
 #[folder = "data/pokesprite/pokemon-gen8"]
+#[include = "*"]
 pub struct Data;

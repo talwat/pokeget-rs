@@ -42,7 +42,7 @@ pub fn get_sprite(
         .to_lowercase();
 
     let path = &format!(
-        "pokesprite/pokemon-gen8/{}/{}{}.png",
+        "{}/{}{}.png",
         if shiny { "shiny" } else { "regular" },
         if female && !is_random { "female/" } else { "" }, // Random pokemon also shouldn't follow the female rule.
         filename.trim()

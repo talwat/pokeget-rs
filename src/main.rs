@@ -1,16 +1,6 @@
 //! Display pokemon sprites in your terminal.
 
-#![warn(
-    clippy::all,
-    clippy::correctness,
-    clippy::suspicious,
-    clippy::style,
-    clippy::complexity,
-    clippy::perf,
-    clippy::pedantic,
-    clippy::restriction,
-    clippy::nursery
-)]
+#![warn(clippy::all, clippy::pedantic, clippy::nursery, clippy::restriction)]
 
 use clap::Parser;
 use inflector::Inflector;

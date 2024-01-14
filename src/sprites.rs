@@ -8,7 +8,7 @@ use crate::{utils::random, Data};
 /// This will also format the names properly.
 pub fn get_sprite(
     pokemon: &mut String,
-    form: &String,
+    form: &str,
     shiny: bool,
     female: bool,
     list: &[&str],
@@ -42,7 +42,7 @@ pub fn get_sprite(
         .to_lowercase();
 
     let path = &format!(
-        "pokesprite/pokemon-gen8/{}/{}{}.png",
+        "{}/{}{}.png",
         if shiny { "shiny" } else { "regular" },
         if female && !is_random { "female/" } else { "" }, // Random pokemon also shouldn't follow the female rule.
         filename.trim()
@@ -84,7 +84,7 @@ pub fn get_sprites(
     pokemons: &mut [String],
     shiny: bool,
     female: bool,
-    form: &String,
+    form: &str,
     list: &[&str],
 ) -> (u32, u32, Vec<DynamicImage>) {
     let mut sprites = Vec::new();

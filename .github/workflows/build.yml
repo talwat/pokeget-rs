@@ -46,7 +46,7 @@ jobs:
       - name: Package as archive
         shell: bash
         run: |
-          cd target/${{ matrix.target }}/release
+          cd ./target/${{ matrix.target }}/release
           if [[ "${{ matrix.platform.os }}" == "windows-latest" ]]; then
             7z a ${{ matrix.name }} ${{ matrix.bin }}
           else

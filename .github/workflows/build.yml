@@ -59,8 +59,15 @@ jobs:
             tar czvf ${{ matrix.name }} ${{ matrix.bin }}
           fi
           cd -
+      - name: Generate SHA-256 checksum file
+        run: |
+          cd ./target/${{ matrix.target }}/release
+          shasum -a 256 ${{ matrix.name }} > ${{ matrix.name }}.sha256
+          cd -
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.target }}
-          path: ./target/${{ matrix.target }}/release/${{ matrix.name }}
+          path: |
+            ./target/${{ matrix.target }}/release/${{ matrix.name }}
+            ./target/${{ matrix.target }}/release/${{ matrix.name }}.sha256

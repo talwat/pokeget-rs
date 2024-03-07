@@ -1,6 +1,8 @@
 name: Build
 on:
   workflow_dispatch:
+  release:
+    types: [created]
 jobs:
   release:
     name: Release - ${{ matrix.release_for }}

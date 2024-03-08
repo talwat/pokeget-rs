@@ -1,6 +1,5 @@
-name: Build
+name: Release Build
 on:
-  workflow_dispatch:
   release:
     types: [created]
 jobs:
@@ -73,3 +72,7 @@ jobs:
           path: |
             ./target/${{ matrix.target }}/release/${{ matrix.name }}
             ./target/${{ matrix.target }}/release/${{ matrix.name }}.sha256
+      - name: Upload to release
+        run: gh release upload ${{github.event.release.tag_name}} \
+             ./target/${{ matrix.target }}/release/${{ matrix.name }} \
+             ./target/${{ matrix.target }}/release/${{ matrix.name }}.sha256

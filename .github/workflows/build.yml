@@ -67,20 +67,20 @@ jobs:
           cd ./target/${{ matrix.target }}/release
           shasum -a 256 ${{ matrix.name }} > ${{ matrix.name }}.sha256
           cd -
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: pokeget-${{ matrix.target }}
-          path: |
-            ./target/${{ matrix.target }}/release/${{ matrix.name }}
-            ./target/${{ matrix.target }}/release/${{ matrix.name }}.sha256
+      #- name: Upload build artifact
+      #  uses: actions/upload-artifact@v4
+      #  with:
+      #    name: pokeget-${{ matrix.target }}
+      #    path: |
+      #      ./target/${{ matrix.target }}/release/${{ matrix.name }}
+      #      ./target/${{ matrix.target }}/release/${{ matrix.name }}.sha256
       - name: sanity check
         shell: bash
         run: |
-          cd ./target/
-          ls
-      - name: Upload to release
+          echo "Dir check"
+          find target/
+      - name: Upload assets to release
         shell: bash
-        run: gh release upload "${{github.event.release.tag_name}}" \
-             "./target/${{ matrix.target }}/release/${{ matrix.name }}" \
+        run: gh release upload ${{github.event.release.tag_name}} \
+             ./target/${{ matrix.target }}/release/${{ matrix.name }} \
              ./target/${{ matrix.target }}/release/${{ matrix.name }}.sha256

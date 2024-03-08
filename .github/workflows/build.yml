@@ -75,6 +75,9 @@ jobs:
             ./target/${{ matrix.target }}/release/${{ matrix.name }}
             ./target/${{ matrix.target }}/release/${{ matrix.name }}.sha256
       - name: Upload to release
-        run: gh release upload ${{github.event.release.tag_name}} \
-             ./target/${{ matrix.target }}/release/${{ matrix.name }} \
-             ./target/${{ matrix.target }}/release/${{ matrix.name }}.sha256
+        run: |
+          cd ./target/${{ matrix.target }}/release
+          ls
+          gh release upload ${{github.event.release.tag_name}} \
+             ${{ matrix.name }} \
+             ${{ matrix.name }}.sha256

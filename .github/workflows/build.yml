@@ -60,8 +60,8 @@ jobs:
             7z a ${{ matrix.name }} ${{ matrix.bin }}
           else
             tar czvf ${{ matrix.name }} ${{ matrix.bin }}
+            echo "$(realpath ${{ matrix.name }})" >> $GITHUB_OUTPUT
           fi
-          echo "$(realpath ${{ matrix.name }})" >> $GITHUB_OUTPUT
           cd -
       - name: Generate SHA-256 checksum file
         run: |

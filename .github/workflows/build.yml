@@ -77,8 +77,8 @@ jobs:
       - name: sanity check
         shell: bash
         run: |
-          echo "Dir check"
-          find target/
+          dirs=$(find target/)
+          echo "$dirs" >> $GITHUB_OUTPUT
       - name: Upload assets to release
         shell: bash
         run: gh release upload ${{github.event.release.tag_name}} \

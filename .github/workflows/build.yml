@@ -76,9 +76,6 @@ jobs:
       #      ./target/${{ matrix.target }}/release/${{ matrix.name }}.sha256
       - name: Upload assets to release
         shell: bash
-        run: |
-          ls
-          find ./target/
-          gh release upload ${{github.event.release.tag_name}} \
+        run: gh release upload ${{github.event.release.tag_name}} \
              target/${{ matrix.target }}/release/${{ matrix.name }} \
              target/${{ matrix.target }}/release/${{ matrix.name }}.sha256

@@ -5,6 +5,7 @@ on:
 jobs:
   release:
     name: Release - ${{ matrix.release_for }}
+    permissions: contents:write
     strategy:
       matrix:
         include:

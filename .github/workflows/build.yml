@@ -1,0 +1,82 @@
+name: Release Build
+on:
+  release:
+    types: [created]
+jobs:
+  release:
+    name: Release - ${{ matrix.release_for }}
+    strategy:
+      matrix:
+        include:
+          - release_for: Linux-x86_64
+            os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            bin: pokeget
+            name: pokeget-Linux-x86_64.tar.gz
+            command: build
+          - release_for: Linux-aarch64
+            os: ubuntu-latest
+            target: aarch64-unknown-linux-gnu
+            bin: pokeget
+            name: pokeget-Linux-aarch64.tar.gz
+            command: build
+          - release_for: Windows-x86_64
+            os: windows-latest
+            target: x86_64-pc-windows-msvc
+            bin: pokeget.exe
+            name: pokeget-Windows-x86_64.zip
+            command: build
+          - release_for: macOS-x86_64
+            os: macOS-latest
+            target: x86_64-apple-darwin
+            bin: pokeget
+            name: pokeget-macOS-x86_64.tar.gz
+            command: build
+          - release_for: macOS-aarch64
+            os: macOS-latest
+            target: aarch64-apple-darwin
+            bin: pokeget
+            name: pokeget-macOS-aarch64.tar.gz
+            command: build
+    runs-on: ${{ matrix.os }}
+    env:
+        GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: 'true'
+      - name: Build binary
+        uses: houseabsolute/actions-rust-cross@v0
+        with:
+          command: ${{ matrix.command }}
+          target: ${{ matrix.target }}
+          args: "--locked --release"
+      - name: Package as archive
+        shell: bash
+        run: |
+          cd ./target/${{ matrix.target }}/release
+          if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
+            7z a ${{ matrix.name }} ${{ matrix.bin }}
+          else
+            tar czvf ${{ matrix.name }} ${{ matrix.bin }}
+          fi
+          cd -
+      - name: Generate SHA-256 checksum file
+        run: |
+          cd ./target/${{ matrix.target }}/release
+          shasum -a 256 ${{ matrix.name }} > ${{ matrix.name }}.sha256
+          cd -
+      #- name: Upload build artifact
+      #  uses: actions/upload-artifact@v4
+      #  with:
+      #    name: pokeget-${{ matrix.target }}
+      #    path: |
+      #      ./target/${{ matrix.target }}/release/${{ matrix.name }}
+      #      ./target/${{ matrix.target }}/release/${{ matrix.name }}.sha256
+      - name: Upload assets to release
+        shell: bash
+        run: |
+          gh release upload ${{github.event.release.tag_name}} \
+             ./target/${{ matrix.target }}/release/${{ matrix.name }} \
+             ./target/${{ matrix.target }}/release/${{ matrix.name }}.sha256

@@ -7,7 +7,6 @@ use inflector::Inflector;
 use pokeget::cli::Args;
 use pokeget::sprites::{combine_sprites, get_sprites};
 use pokeget::utils::get_form;
-use pokeget::Data;
 use std::process::exit;
 
 fn format_name(name: &String) -> String {
@@ -15,7 +14,8 @@ fn format_name(name: &String) -> String {
 }
 
 fn main() {
-    let pokemon_list: Box<[&'static str]> = include_str!("../data/pokemon.txt").split('\n').collect();
+    let pokemon_list: Box<[&'static str]> =
+        include_str!("../data/pokemon.txt").split('\n').collect();
 
     let args = Args::parse();
 

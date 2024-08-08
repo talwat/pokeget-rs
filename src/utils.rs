@@ -11,25 +11,17 @@ pub fn random(list: &[&str]) -> String {
 
 /// Uses the arguments like gmax, mega, etc... to get a form which is appended to the pokemon filename.
 pub fn get_form(args: &Args) -> String {
-    let mut form;
-
-    if args.mega {
-        form = String::from("mega");
-    } else if args.mega_x {
-        form = String::from("mega-x");
-    } else if args.mega_y {
-        form = String::from("mega-y");
-    } else if args.alolan {
-        form = String::from("alola");
-    } else if args.gmax {
-        form = String::from("gmax");
-    } else if args.hisui {
-        form = String::from("hisui");
-    } else if args.galar {
-        form = String::from("galar");
-    } else {
-        form = args.form.clone();
+    let mut form = match args {
+        Args { mega: true, .. } => "mega",
+        Args { mega_x: true, .. } => "mega-x",
+        Args { mega_y: true, .. } => "mega-y",
+        Args { alolan: true, .. } => "alola",
+        Args { gmax: true, .. } => "gmax",
+        Args { hisui: true, .. } => "hisui",
+        Args { galar: true, .. } => "galar",
+        _ => &args.form,
     }
+    .to_string();
 
     if args.noble {
         form.push_str("-noble");

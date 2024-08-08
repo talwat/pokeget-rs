@@ -14,11 +14,11 @@ pub fn get_sprite(
     list: &[&str],
 ) -> Vec<u8> {
     if let Ok(pokedex_id) = pokemon.parse::<usize>() {
-        if pokedex_id == 0 {
-            *pokemon = String::from("random");
-        } else if list.len() >= pokedex_id {
-            *pokemon = String::from(list[pokedex_id - 1]);
-        }
+        *pokemon = match pokedex_id {
+            0 => "random".to_string(),
+            id if id <= list.len() => list[id - 1].to_string(),
+            _ => pokemon.clone(),
+        };
     }
 
     let is_random = pokemon == "random";
@@ -31,8 +31,7 @@ pub fn get_sprite(
 
     // The form shouldn't be applied to random pokemon.
     if !form.is_empty() && !is_random {
-        filename.push('-');
-        filename.push_str(form);
+        filename.push_str(&format!("-{}", form));
     }
 
     // I hate Mr. Mime and Farfetch'd.

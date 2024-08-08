@@ -3,15 +3,10 @@
 #![warn(clippy::all, clippy::pedantic, clippy::nursery, clippy::restriction)]
 
 use clap::Parser;
-use inflector::Inflector;
 use pokeget::cli::Args;
-use pokeget::sprites::{combine_sprites, get_sprites};
-use pokeget::utils::get_form;
+use pokeget::pokemon::{get_form, Pokemon};
+use pokeget::sprites::combine_sprites;
 use std::process::exit;
-
-fn format_name(name: &String) -> String {
-    name.to_title_case().replace('-', " ")
-}
 
 fn main() {
     let pokemon_list: Box<[&'static str]> =
@@ -25,22 +20,18 @@ fn main() {
     }
 
     let form = get_form(&args);
+    let pokemons: Vec<Pokemon> = args
+        .pokemon
+        .iter()
+        .map(|x| Pokemon::new(x.to_owned(), &pokemon_list, form.clone(), &args))
+        .collect();
 
-    let mut pokemons = args.pokemon;
-
-    let (width, height, sprites) =
-        get_sprites(&mut pokemons, args.shiny, args.female, &form, &pokemon_list);
-    let combined = combine_sprites(width, height, &sprites);
+    let combined = combine_sprites(&pokemons);
 
     if !args.hide_name {
-        eprintln!(
-            "{}\n",
-            pokemons
-                .iter()
-                .enumerate()
-                .map(|(i, x)| format_name(x) + if i != pokemons.len() - 1 { ", " } else { "" })
-                .collect::<String>()
-        );
+        let names: Vec<String> = pokemons.iter().map(|x| x.name.clone()).collect();
+
+        eprintln!("{}", names.join(", "));
     }
 
     println!("{}", showie::to_ascii(&combined));

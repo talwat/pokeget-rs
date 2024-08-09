@@ -13,51 +13,6 @@ pub fn random(list: &[&str]) -> String {
     String::from(list[rand.gen_range(0..list.len())])
 }
 
-/// Uses the arguments like gmax, mega, etc... to get a form which is appended to the pokemon filename.
-pub fn get_form(args: &Args) -> String {
-    let mut form = match args {
-        Args { mega: true, .. } => "mega",
-        Args { mega_x: true, .. } => "mega-x",
-        Args { mega_y: true, .. } => "mega-y",
-        Args { alolan: true, .. } => "alola",
-        Args { gmax: true, .. } => "gmax",
-        Args { hisui: true, .. } => "hisui",
-        Args { galar: true, .. } => "galar",
-        _ => &args.form,
-    }
-    .to_string();
-
-    if args.noble {
-        form.push_str("-noble");
-    }
-
-    form
-}
-
-fn format_path(name: &str, form: String, random: bool, shiny: bool, female: bool) -> String {
-    let mut filename = name.to_owned();
-
-    // The form shouldn't be applied to random pokemon.
-    if !form.is_empty() && !random {
-        filename.push_str(&format!("-{}", form));
-    }
-
-    // I hate Mr. Mime and Farfetch'd.
-    filename = filename
-        .replace([' ', '_'], "-")
-        .replace(['.', '\'', ':'], "")
-        .to_lowercase();
-
-    let path = format!(
-        "{}/{}{}.png",
-        if shiny { "shiny" } else { "regular" },
-        if female && !random { "female/" } else { "" }, // Random pokemon also shouldn't follow the female rule.
-        filename.trim()
-    );
-
-    return path;
-}
-
 fn format_name(name: String) -> String {
     name.replace('-', " ").replace('\'', "").to_title_case()
 }
@@ -89,7 +44,7 @@ impl Selection {
     }
 }
 
-pub struct Pokemon {
+pub struct Pokemon<'a> {
     /// The path of the Pokemon in pokesprite.
     /// Eg. `regular/abra.png`
     pub path: String,
@@ -104,10 +59,69 @@ pub struct Pokemon {
 
     /// The sprite of the Pokemon, as a [DynamicImage].
     pub sprite: DynamicImage,
+
+    /// Data, like the form and whether a pokemon is shiny or not.
+    pub attributes: &'a Attributes
 }
 
-impl Pokemon {
-    pub fn new(id: String, list: &[&'static str], form: String, args: &Args) -> Self {
+pub struct Attributes {
+    pub form: String,
+    pub female: bool,
+    pub shiny: bool,
+}
+
+impl Attributes {
+    pub fn new(args: &Args) -> Self {
+        let mut form = match args {
+            Args { mega: true, .. } => "mega",
+            Args { mega_x: true, .. } => "mega-x",
+            Args { mega_y: true, .. } => "mega-y",
+            Args { alolan: true, .. } => "alola",
+            Args { gmax: true, .. } => "gmax",
+            Args { hisui: true, .. } => "hisui",
+            Args { galar: true, .. } => "galar",
+            _ => &args.form,
+        }
+        .to_string();
+    
+        if args.noble {
+            form.push_str("-noble");
+        }
+
+        Self {
+            form,
+            female: args.female,
+            shiny: args.shiny
+        }
+    }
+
+    pub fn path(&self, name: &str, random: bool) -> String {
+        let mut filename = name.to_owned();
+
+        // The form shouldn't be applied to random pokemon.
+        if !self.form.is_empty() && !random {
+            filename.push_str(&format!("-{}", self.form));
+        }
+    
+        // I hate Mr. Mime and Farfetch'd.
+        filename = filename
+            .replace([' ', '_'], "-")
+            .replace(['.', '\'', ':'], "")
+            .to_lowercase();
+    
+        let path = format!(
+            "{}/{}{}.png",
+            if self.shiny { "shiny" } else { "regular" },
+            if self.female && !random { "female/" } else { "" }, // Random pokemon also shouldn't follow the female rule.
+            filename.trim()
+        );
+    
+        path
+    }
+}
+
+impl<'a> Pokemon<'a> {
+    pub fn new(id: String, list: &[&'static str], attributes: &'a Attributes) -> Self {
         let mut selection = Selection::parse(id, list);
         let is_random = selection == Selection::Random;
 
@@ -127,7 +141,7 @@ impl Pokemon {
             panic!("selection should have been converted, but wasn't")
         };
 
-        let path = format_path(&name, form, is_random, args.shiny, args.female);
+        let path = attributes.path(&name, is_random);
         let bytes = Data::get(&path)
             .unwrap_or_else(|| {
                 eprintln!("pokemon not found");
@@ -143,6 +157,7 @@ impl Pokemon {
             path,
             name: format_name(name),
             sprite: trimmed,
+            attributes
         }
     }
 }

@@ -4,7 +4,7 @@
 
 use clap::Parser;
 use pokeget::cli::Args;
-use pokeget::pokemon::{get_form, Pokemon};
+use pokeget::pokemon::{Attributes, Pokemon};
 use pokeget::sprites::combine_sprites;
 use std::process::exit;
 
@@ -19,17 +19,16 @@ fn main() {
         exit(1);
     }
 
-    let form = get_form(&args);
-    let pokemons: Vec<Pokemon> = args
-        .pokemon
-        .iter()
-        .map(|x| Pokemon::new(x.to_owned(), &pokemon_list, form.clone(), &args))
+    let attributes = Attributes::new(&args);
+    let pokemons: Vec<Pokemon> = args.pokemon
+        .into_iter()
+        .map(|x| Pokemon::new(x, &pokemon_list, &attributes))
         .collect();
 
     let combined = combine_sprites(&pokemons);
 
     if !args.hide_name {
-        let names: Vec<String> = pokemons.iter().map(|x| x.name.clone()).collect();
+        let names: Vec<&str> = pokemons.iter().map(|x| x.name.as_ref()).collect();
 
         eprintln!("{}", names.join(", "));
     }

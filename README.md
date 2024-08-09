@@ -8,27 +8,23 @@ A better rust version of pokeget.
 
 for more info, run `pokeget --help`
 
-Also, if you're using pokeget in your bashrc, then instead of running `pokeget <pokemon>`,
+Also, if you're using pokeget in your `.bashrc`, then instead of running `pokeget <pokemon>`,
 you can just write the output to a file by doing: `pokeget <pokemon> > file.txt` and then
 have something like `cat file.txt` bashrc.
 
-You can also use multiple pokemon like:
+You can also use multiple pokemon with names:
 
-`pokeget bulbasaur pikachu`
+`pokeget bulbasaur pikachu random`
 
-and dex id's work too:
+Or pokedex ID's:
 
 `pokeget 1 2 3`
 
 ## Installation
 
-If you're on arch, you can use the AUR:
+### Cargo *(recommended)*
 
-```sh
-yay -S pokeget
-```
-
-You can either use cargo by doing:
+The recommended installation method is to use cargo:
 
 ```sh
 cargo install pokeget
@@ -36,7 +32,21 @@ cargo install pokeget
 
 and making sure `$HOME/.cargo/bin` is added to `$PATH`.
 
-or clone the repository and compiling manually by doing:
+### AUR
+
+If you're on Arch, you can also use the AUR:
+
+```sh
+yay -S pokeget
+```
+
+> [!WARNING]  
+> The AUR repository is currently unmaintained.
+> If you'd like to maintain it, [open an issue](https://github.com/talwat/pokeget-rs/issues).
+
+### Git
+
+You can also clone the repository and compile manually by doing:
 
 ```sh
 git clone --recurse-submodules https://github.com/talwat/pokeget-rs.git
@@ -85,11 +95,6 @@ pokeget-rs has an edge over projects like the old pokeget, pokeshell, etc... sin
 It also is significantly (5.5x) faster than krabby which is another very similar project.
 
 For more info, go to [OTHER_PROJECTS.md](OTHER_PROJECTS.md).
-
-## Where are the prebuilt binaries?
-
-I cannot figure out how to compile rust to multiple different platforms with a CI pipeline like github actions.
-If someone knows how, PLEASE make a PR.
 
 ## What about big sprites?
 

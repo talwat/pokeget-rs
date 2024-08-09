@@ -42,7 +42,7 @@ pub struct Args {
     #[arg(long, default_value_t = false)]
     pub hisui: bool,
 
-    /// Display the noble variant of the pokemon, this option often times only works in tandom with --hisui.
+    /// Display the noble variant of the pokemon, this option often times only works in tandom with --hisui
     #[arg(short, long, default_value_t = false)]
     pub noble: bool,
 
@@ -50,7 +50,7 @@ pub struct Args {
     #[arg(long, default_value_t = false)]
     pub galar: bool,
 
-    /// Display the female variant of the pokemon if it exists. This doesn't apply to nidoran, for some reason.
+    /// Display the female variant of the pokemon if it exists. This doesn't apply to nidoran, for some reason
     #[arg(long, default_value_t = false)]
     pub female: bool,
 }

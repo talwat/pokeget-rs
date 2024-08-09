@@ -7,12 +7,13 @@ use rand::Rng;
 use crate::{cli::Args, Data};
 
 /// Returns a random pokemon.
-pub fn random(list: &[&str]) -> String {
+fn random(list: &[&str]) -> String {
     let mut rand = rand::thread_rng();
 
     String::from(list[rand.gen_range(0..list.len())])
 }
 
+/// Formats the pokemon name for display.
 fn format_name(name: String) -> String {
     name.replace('-', " ").replace('\'', "").to_title_case()
 }
@@ -31,8 +32,10 @@ impl Selection {
                 // If it's zero, then change it to random.
                 0 => Selection::Random,
 
-                //
+                // If it's not zero and in the range of the list, then it's a dex id.
                 id if (id > 0 && id <= list.len()) => Selection::DexId(id - 1),
+                
+                // This shouldn't normally fire, but it's here to give the proper error message.
                 _ => Selection::Name(id),
             };
         } else {

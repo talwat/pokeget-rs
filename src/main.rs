@@ -4,14 +4,13 @@
 
 use clap::Parser;
 use pokeget::cli::Args;
+use pokeget::list::List;
 use pokeget::pokemon::{Attributes, Pokemon};
 use pokeget::sprites::combine_sprites;
 use std::process::exit;
 
 fn main() {
-    let pokemon_list: Box<[&'static str]> =
-        include_str!("../data/pokemon.txt").split('\n').collect();
-
+    let list = List::read();
     let args = Args::parse();
 
     if args.pokemon.is_empty() {
@@ -20,9 +19,10 @@ fn main() {
     }
 
     let attributes = Attributes::new(&args);
-    let pokemons: Vec<Pokemon> = args.pokemon
+    let pokemons: Vec<Pokemon> = args
+        .pokemon
         .into_iter()
-        .map(|x| Pokemon::new(x, &pokemon_list, &attributes))
+        .map(|x| Pokemon::new(x, &list, &attributes))
         .collect();
 
     let combined = combine_sprites(&pokemons);

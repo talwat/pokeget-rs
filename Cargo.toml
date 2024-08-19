@@ -14,10 +14,13 @@ repository = "https://github.com/talwat/pokeget-rs"
 
 [dependencies]
 Inflector = { version = "0.11.4", default-features = false }
+bimap = "0.6.3"
 clap = { version = "4.5.14", features = ["derive"] }
+csv = "1.3.0"
 image = { version = "0.24.9", default-features = false, features = [
     "png",
 ] }
+linked-hash-map = "0.5.6"
 rand = "0.8.5"
 rust-embed = { version = "8.5.0" }
 showie = "1.0.1"

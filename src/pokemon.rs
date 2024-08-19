@@ -1,40 +1,27 @@
 use std::process::exit;
 
 use image::DynamicImage;
-use inflector::Inflector;
-use rand::Rng;
 
-use crate::{cli::Args, Data};
-
-/// Returns a random pokemon.
-fn random(list: &[&str]) -> String {
-    let mut rand = rand::thread_rng();
-
-    String::from(list[rand.gen_range(0..list.len())])
-}
-
-/// Formats the pokemon name for display.
-fn format_name(name: String) -> String {
-    name.replace('-', " ").replace('\'', "").to_title_case()
-}
+use crate::{cli::Args, list::List, Data};
 
 #[derive(PartialEq, Eq)]
 pub enum Selection {
     Random,
     DexId(usize),
     Name(String),
+    Final(String, String),
 }
 
 impl Selection {
-    pub fn parse(id: String, list: &[&'static str]) -> Self {
+    pub fn parse(id: String) -> Self {
         if let Ok(dex_id) = id.parse::<usize>() {
             return match dex_id {
                 // If it's zero, then change it to random.
                 0 => Selection::Random,
 
                 // If it's not zero and in the range of the list, then it's a dex id.
-                id if (id > 0 && id <= list.len()) => Selection::DexId(id - 1),
-                
+                id if (id > 0) => Selection::DexId(id - 1),
+
                 // This shouldn't normally fire, but it's here to give the proper error message.
                 _ => Selection::Name(id),
             };
@@ -64,7 +51,7 @@ pub struct Pokemon<'a> {
     pub sprite: DynamicImage,
 
     /// Data, like the form and whether a pokemon is shiny or not.
-    pub attributes: &'a Attributes
+    pub attributes: &'a Attributes,
 }
 
 pub struct Attributes {
@@ -86,7 +73,7 @@ impl Attributes {
             _ => &args.form,
         }
         .to_string();
-    
+
         if args.noble {
             form.push_str("-noble");
         }
@@ -94,7 +81,7 @@ impl Attributes {
         Self {
             form,
             female: args.female,
-            shiny: args.shiny
+            shiny: args.shiny,
         }
     }
 
@@ -105,32 +92,37 @@ impl Attributes {
         if !self.form.is_empty() && !random {
             filename.push_str(&format!("-{}", self.form));
         }
-    
+
         // I hate Mr. Mime and Farfetch'd.
         filename = filename
             .replace([' ', '_'], "-")
             .replace(['.', '\'', ':'], "")
             .to_lowercase();
-    
+
         let path = format!(
             "{}/{}{}.png",
             if self.shiny { "shiny" } else { "regular" },
-            if self.female && !random { "female/" } else { "" }, // Random pokemon also shouldn't follow the female rule.
+            if self.female && !random {
+                "female/"
+            } else {
+                ""
+            }, // Random pokemon also shouldn't follow the female rule.
             filename.trim()
         );
-    
+
         path
     }
 }
 
 impl<'a> Pokemon<'a> {
-    pub fn new(id: String, list: &[&'static str], attributes: &'a Attributes) -> Self {
-        let mut selection = Selection::parse(id, list);
+    pub fn new(id: String, list: &List, attributes: &'a Attributes) -> Self {
+        let mut selection = Selection::parse(id);
         let is_random = selection == Selection::Random;
 
         // If it's random, then let's just look up a random pokemon from the list.
         if is_random {
-            selection = Selection::Name(random(list));
+            let random = list.random();
+            selection = Selection::Name(random);
         }
 
         // If it's a dex id, then let's look up that id in the list.
@@ -158,9 +150,9 @@ impl<'a> Pokemon<'a> {
 
         Self {
             path,
-            name: format_name(name),
+            name: list.format_name(&name),
             sprite: trimmed,
-            attributes
+            attributes,
         }
     }
 }

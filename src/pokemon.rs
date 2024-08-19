@@ -4,17 +4,25 @@ use image::DynamicImage;
 
 use crate::{cli::Args, list::List, Data};
 
+/// Enum used to assist parsing user input.
+///
+/// It can sort all types of inputs, and then evaluate them to a filename.
 #[derive(PartialEq, Eq)]
 pub enum Selection {
+    /// When a random pokemon is selected (`0` or `random`).
     Random,
+
+    /// When a DexID is selected (number larger than 0).
     DexId(usize),
+
+    /// When a pokemon name/id is selected.
     Name(String),
-    Final(String, String),
 }
 
 impl Selection {
-    pub fn parse(id: String) -> Self {
-        if let Ok(dex_id) = id.parse::<usize>() {
+    /// Parses a raw argument into a [`Selection`].
+    pub fn parse(arg: String) -> Self {
+        if let Ok(dex_id) = arg.parse::<usize>() {
             return match dex_id {
                 // If it's zero, then change it to random.
                 0 => Selection::Random,
@@ -23,37 +31,45 @@ impl Selection {
                 id if (id > 0) => Selection::DexId(id - 1),
 
                 // This shouldn't normally fire, but it's here to give the proper error message.
-                _ => Selection::Name(id),
+                _ => Selection::Name(arg),
             };
         } else {
-            return match id.as_str() {
+            return match arg.as_str() {
                 "random" => Selection::Random,
-                _ => Selection::Name(id),
+                _ => Selection::Name(arg),
             };
+        }
+    }
+
+    /// Evaluates the selection and returns a pokemon filename.
+    pub fn eval(self, list: &List) -> String {
+        match self {
+            Selection::Random => list.random(),
+            Selection::DexId(id) => list[id].to_string(),
+            Selection::Name(name) => name,
         }
     }
 }
 
+/// The struct used to represent a Pokemon's data.
+/// This includes it's file path, formatted name, sprite, and attributes.
 pub struct Pokemon<'a> {
     /// The path of the Pokemon in pokesprite.
     /// Eg. `regular/abra.png`
     pub path: String,
 
-    /// The formatted name of the pokemon.
-    /// This is usually done by first getting the file path, and then formatting it.
-    ///
-    /// It's not a perfect solution, but it's the fastest option.
-    // TODO: Make a script to use pokesprites' own database and compile a list of
-    // filenames and their corrosponding formatted names.
+    /// The formatted name of the pokemon, usually gotten from a [List].
     pub name: String,
 
     /// The sprite of the Pokemon, as a [DynamicImage].
+    /// @see image
     pub sprite: DynamicImage,
 
     /// Data, like the form and whether a pokemon is shiny or not.
     pub attributes: &'a Attributes,
 }
 
+/// Handles parsing the form, as well as whether a pokemon is female or shiny.
 pub struct Attributes {
     pub form: String,
     pub female: bool,
@@ -61,6 +77,7 @@ pub struct Attributes {
 }
 
 impl Attributes {
+    /// Make a new [`Attributes`] by parsing the command line arguments.
     pub fn new(args: &Args) -> Self {
         let mut form = match args {
             Args { mega: true, .. } => "mega",
@@ -85,6 +102,7 @@ impl Attributes {
         }
     }
 
+    /// Formats the attributes and a filename from a [Selection] into a completed path.
     pub fn path(&self, name: &str, random: bool) -> String {
         let mut filename = name.to_owned();
 
@@ -115,26 +133,10 @@ impl Attributes {
 }
 
 impl<'a> Pokemon<'a> {
-    pub fn new(id: String, list: &List, attributes: &'a Attributes) -> Self {
-        let mut selection = Selection::parse(id);
+    pub fn new(arg: String, list: &List, attributes: &'a Attributes) -> Self {
+        let selection = Selection::parse(arg);
         let is_random = selection == Selection::Random;
-
-        // If it's random, then let's just look up a random pokemon from the list.
-        if is_random {
-            let random = list.random();
-            selection = Selection::Name(random);
-        }
-
-        // If it's a dex id, then let's look up that id in the list.
-        if let Selection::DexId(dex_id) = selection {
-            selection = Selection::Name(list[dex_id].to_string());
-        }
-
-        // We've now converted both other types into `Selection::Name`,
-        // but if we failed somewhere, then we need to panic.
-        let Selection::Name(name) = selection else {
-            panic!("selection should have been converted, but wasn't")
-        };
+        let name = selection.eval(list);
 
         let path = attributes.path(&name, is_random);
         let bytes = Data::get(&path)

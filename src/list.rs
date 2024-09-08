@@ -15,7 +15,7 @@ pub struct List {
     names: Vec<String>,
 }
 
-impl<'a> Index<usize> for List {
+impl Index<usize> for List {
     type Output = String;
 
     fn index(&self, index: usize) -> &Self::Output {
@@ -23,7 +23,7 @@ impl<'a> Index<usize> for List {
     }
 }
 
-impl<'a> Index<&str> for List {
+impl Index<&str> for List {
     type Output = usize;
 
     fn index(&self, index: &str) -> &Self::Output {

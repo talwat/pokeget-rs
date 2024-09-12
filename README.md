@@ -53,10 +53,6 @@ If you're on Arch, you can also use the AUR:
 yay -S pokeget
 ```
 
-> [!WARNING]  
-> The AUR repository is currently unmaintained.
-> If you'd like to maintain it, [open an issue](https://github.com/talwat/pokeget-rs/issues).
-
 ### Git
 
 You can also clone the repository and compile manually by doing:

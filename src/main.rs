@@ -1,7 +1,5 @@
 //! Display pokemon sprites in your terminal.
 
-#![warn(clippy::all, clippy::pedantic, clippy::nursery, clippy::restriction)]
-
 use clap::Parser;
 use pokeget::cli::Args;
 use pokeget::list::List;

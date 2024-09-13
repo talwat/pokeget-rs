@@ -1,3 +1,5 @@
+#![warn(clippy::all, clippy::pedantic, clippy::nursery, clippy::restriction)]
+
 use std::io::Cursor;
 
 use bimap::BiHashMap;
@@ -9,7 +11,7 @@ use rand::Rng;
 /// Used to derive filenames from Pokedex ID's, and to
 /// format image filenames back into proper pokemon names.
 pub struct List {
-    // The Pokedex IDs and their corresponding filenames.
+    /// The Pokedex IDs and their corresponding filenames.
     ids: BiHashMap<usize, String>,
 
     /// All the proper, formatted names in order of Pokedex ID.
@@ -19,11 +21,11 @@ pub struct List {
 impl List {
     /// Reads a new [`List`] from `data/names.csv`.
     pub fn read() -> Self {
-        let file: &'static str = include_str!("../data/names.csv");
+        const FILE: &'static str = include_str!("../data/names.csv");
 
         let mut reader = csv::ReaderBuilder::new()
             .has_headers(false)
-            .from_reader(Cursor::new(file));
+            .from_reader(Cursor::new(FILE));
 
         const CAPACITY: usize = 1000;
 
@@ -50,9 +52,7 @@ impl List {
     /// assert_eq!(list.format_name("mr-mime"), "Mr. Mime")
     /// ```
     pub fn format_name(&self, filename: &str) -> String {
-        let raw_fmt = |x: &str| {
-            x.replace('-', " ").replace('\'', "").to_title_case()
-        };
+        let raw_fmt = |x: &str| x.replace('-', " ").replace('\'', "").to_title_case();
 
         let Some(id) = self.ids.get_by_right(filename) else {
             return raw_fmt(filename);
@@ -60,8 +60,8 @@ impl List {
         let Some(name) = self.names.get(*id) else {
             return raw_fmt(filename);
         };
-    
-        return name.clone();
+
+        name.clone()
     }
 
     /// Gets a pokemon filename by a Dex ID.

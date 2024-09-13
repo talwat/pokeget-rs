@@ -10,7 +10,10 @@ documentation = "https://github.com/talwat/pokeget-rs"
 homepage = "https://github.com/talwat/pokeget-rs"
 repository = "https://github.com/talwat/pokeget-rs"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[profile.release]
+codegen-units = 1
+lto = "thin"
+strip = "symbols"
 
 [dependencies]
 Inflector = "0.11.4"

@@ -23,7 +23,7 @@ impl Selection {
     /// Parses a raw argument into a [`Selection`].
     pub fn parse(arg: String) -> Self {
         if let Ok(dex_id) = arg.parse::<usize>() {
-            return match dex_id {
+            match dex_id {
                 // If it's zero, then change it to random.
                 0 => Selection::Random,
 
@@ -32,12 +32,12 @@ impl Selection {
 
                 // This shouldn't normally fire, but it's here to give the proper error message.
                 _ => Selection::Name(arg),
-            };
+            }
         } else {
-            return match arg.as_str() {
+            match arg.as_str() {
                 "random" => Selection::Random,
                 _ => Selection::Name(arg),
-            };
+            }
         }
     }
 

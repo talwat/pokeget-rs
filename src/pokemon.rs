@@ -45,7 +45,7 @@ impl Selection {
     pub fn eval(self, list: &List) -> String {
         match self {
             Selection::Random => list.random(),
-            Selection::DexId(id) => list[id].to_string(),
+            Selection::DexId(id) => list.get_by_id(id).unwrap().clone(),
             Selection::Name(name) => name,
         }
     }

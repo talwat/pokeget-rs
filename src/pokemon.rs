@@ -62,11 +62,39 @@ pub struct Pokemon<'a> {
     pub name: String,
 
     /// The sprite of the Pokemon, as a [DynamicImage].
-    /// @see image
     pub sprite: DynamicImage,
 
     /// Data, like the form and whether a pokemon is shiny or not.
     pub attributes: &'a Attributes,
+}
+
+impl<'a> Pokemon<'a> {
+    /// Creates a new pokemon.
+    /// This also fetches the sprite & formats the name.
+    pub fn new(arg: String, list: &List, attributes: &'a Attributes) -> Self {
+        let selection = Selection::parse(arg);
+        let is_random = selection == Selection::Random;
+        let name = selection.eval(list);
+
+        let path = attributes.path(&name, is_random);
+        let bytes = Data::get(&path)
+            .unwrap_or_else(|| {
+                eprintln!("pokemon not found");
+                exit(1)
+            })
+            .data
+            .into_owned();
+
+        let img = image::load_from_memory(&bytes).unwrap();
+        let trimmed = showie::trim(&img);
+
+        Self {
+            path,
+            name: list.format_name(&name),
+            sprite: trimmed,
+            attributes,
+        }
+    }
 }
 
 /// Handles parsing the form, as well as whether a pokemon is female or shiny.
@@ -76,6 +104,7 @@ pub struct Attributes {
     pub shiny: bool,
 }
 
+/// Pokemon attribues, like whether it's shiny, female, and it's form.
 impl Attributes {
     /// Make a new [`Attributes`] by parsing the command line arguments.
     pub fn new(args: &Args) -> Self {
@@ -129,32 +158,5 @@ impl Attributes {
         );
 
         path
-    }
-}
-
-impl<'a> Pokemon<'a> {
-    pub fn new(arg: String, list: &List, attributes: &'a Attributes) -> Self {
-        let selection = Selection::parse(arg);
-        let is_random = selection == Selection::Random;
-        let name = selection.eval(list);
-
-        let path = attributes.path(&name, is_random);
-        let bytes = Data::get(&path)
-            .unwrap_or_else(|| {
-                eprintln!("pokemon not found");
-                exit(1)
-            })
-            .data
-            .into_owned();
-
-        let img = image::load_from_memory(&bytes).unwrap();
-        let trimmed = showie::trim(&img);
-
-        Self {
-            path,
-            name: list.format_name(&name),
-            sprite: trimmed,
-            attributes,
-        }
     }
 }

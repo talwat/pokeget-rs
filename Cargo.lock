@@ -473,7 +473,7 @@ dependencies = [
 
 [[package]]
 name = "pokeget"
-version = "1.6.3"
+version = "1.6.4"
 dependencies = [
  "Inflector",
  "bimap",

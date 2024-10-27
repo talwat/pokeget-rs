@@ -12,9 +12,9 @@ However, it also requires the actual sprite files be on your machine, so it isn'
 
 ## [pokeshell](https://github.com/acxz/pokeshell)
 
-It is written in pure bash, but calls terminal image viewers like [timg](https://github.com/hzeller/timg)/[chafa](https://github.com/hpjansson/chafa) for display so it is slower.
+It is written in bash, but calls terminal image viewers like [timg](https://github.com/hzeller/timg)/[chafa](https://github.com/hpjansson/chafa) for display so it is significantly slower.
 
-Other than that, it's extremely feature rich with resizing for terminal fit, tab completions, animations and more.
+Other than that, it's extremely feature rich but is also far heavier because of timg & chafa.
 
 ## [krabby](https://github.com/yannjor/krabby)
 

@@ -8,8 +8,8 @@ use pokeget::sprites::combine_sprites;
 use std::process::exit;
 
 fn main() {
-    let list = List::read();
     let args = Args::parse();
+    let list = List::read(&args.lang);
 
     if args.pokemon.is_empty() {
         eprintln!("you must specify the pokemon you want to display");

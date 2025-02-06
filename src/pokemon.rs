@@ -76,7 +76,19 @@ impl<'a> Pokemon<'a> {
         let is_random = selection == Selection::Random;
         let name = selection.eval(list);
 
-        let path = attributes.path(&name, is_random);
+        let mut name_en = name.clone();
+
+        if !is_random {
+            let name_opt = list.get_english_name(&name);
+            if name_opt.is_none() {
+                eprintln!("pokemon not found");
+                exit(1)
+            } else {
+                name_en = name_opt.unwrap();
+            }
+        }
+
+        let path = attributes.path(&name_en, is_random);
         let bytes = Data::get(&path)
             .unwrap_or_else(|| {
                 eprintln!("pokemon not found");

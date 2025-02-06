@@ -53,4 +53,8 @@ pub struct Args {
     /// Display the female variant of the pokemon if it exists. This doesn't apply to nidoran, for some reason
     #[arg(long, default_value_t = false)]
     pub female: bool,
+
+    /// The language to use for pokemon names (en, de)
+    #[arg(short, long, default_value = "en")]
+    pub lang: String,
 }

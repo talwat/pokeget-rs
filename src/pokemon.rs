@@ -2,6 +2,8 @@ use std::process::exit;
 
 use image::DynamicImage;
 
+use rand::Rng;
+
 use crate::{cli::Args, list::List, Data};
 
 /// Enum used to assist parsing user input.
@@ -124,10 +126,16 @@ impl Attributes {
             form.push_str("-noble");
         }
 
+        let shiny = if let Some(set_shiny) = args.shiny {
+            set_shiny
+        } else {
+            rand::thread_rng().gen_bool(1.0 / args.shiny_rate)
+        };
+
         Self {
             form,
             female: args.female,
-            shiny: args.shiny,
+            shiny,
         }
     }
 

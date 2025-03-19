@@ -45,7 +45,14 @@ impl Selection {
     pub fn eval(self, list: &List) -> String {
         match self {
             Selection::Random => list.random(),
-            Selection::DexId(id) => list.get_by_id(id).unwrap().clone(),
+            Selection::DexId(id) => list
+                .get_by_id(id)
+                .unwrap_or_else(|| {
+                    // add 1 to id so that error message matches user input
+                    eprintln!("{} is not a valid pokedex ID", id + 1);
+                    exit(1)
+                })
+                .clone(),
             Selection::Name(name) => name,
         }
     }

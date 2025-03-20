@@ -33,6 +33,10 @@ so using it on shell initialization is also not a very large bottleneck.
 
 `pokeget raichu sandslash meowth --alolan`
 
+#### Change shiny rate
+
+`pokeget noivern --shiny-rate 4096`
+
 ## Installation
 
 ### Cargo *(recommended)*

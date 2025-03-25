@@ -30,10 +30,6 @@ pub struct Args {
     #[arg(short, long, num_args = 0..=1, default_missing_value = "true", value_parser = BoolishValueParser::new())]
     pub shiny: Option<bool>,
 
-    /// Chance of displaying shiny pokemon
-    #[arg(short = 'r', long, default_value = "8192")]
-    pub shiny_rate: f64,
-
     /// Display the alolan variant of the pokemon
     #[arg(short, long, default_value_t = false)]
     pub alolan: bool,

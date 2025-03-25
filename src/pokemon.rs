@@ -126,10 +126,32 @@ impl Attributes {
             form.push_str("-noble");
         }
 
+        let rate_env_var = "POKEGET_SHINY_RATE";
+        let default_rate = 8192.0;
+        let shiny_rate = match std::env::var(rate_env_var) {
+            Ok(rate) => match rate.parse::<f64>() {
+                Ok(value) => value,
+                Err(_) => {
+                    eprintln!(
+                        "Couldn't parse {rate_env_var} to f64, using default {default_rate}."
+                    );
+                    default_rate
+                }
+            },
+            Err(rate) => {
+                match rate {
+                    std::env::VarError::NotPresent => 8192.0,
+                    std::env::VarError::NotUnicode(_) => {
+                        eprintln!("Non Unicode data found in {rate_env_var}, using default {default_rate}.");
+                        default_rate
+                    }
+                }
+            }
+        };
         let shiny = if let Some(set_shiny) = args.shiny {
             set_shiny
         } else {
-            rand::thread_rng().gen_bool(1.0 / args.shiny_rate)
+            rand::thread_rng().gen_bool(1.0 / shiny_rate)
         };
 
         Self {

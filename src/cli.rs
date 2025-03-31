@@ -1,4 +1,4 @@
-use clap::{builder::BoolishValueParser, Parser};
+use clap::Parser;
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
@@ -27,8 +27,8 @@ pub struct Args {
     pub mega_y: bool,
 
     /// Display the pokemon as shiny
-    #[arg(short, long, num_args = 0..=1, default_missing_value = "true", value_parser = BoolishValueParser::new())]
-    pub shiny: Option<bool>,
+    #[arg(short, long, default_value_t = false)]
+    pub shiny: bool,
 
     /// Display the alolan variant of the pokemon
     #[arg(short, long, default_value_t = false)]

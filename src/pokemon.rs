@@ -6,6 +6,8 @@ use rand::Rng;
 
 use crate::{cli::Args, list::List, Data};
 
+const DEFAULT_SHINY_RATE: u32 = 8192;
+
 /// Enum used to assist parsing user input.
 ///
 /// It can sort all types of inputs, and then evaluate them to a filename.
@@ -108,6 +110,26 @@ pub struct Attributes {
 
 /// Pokemon attribues, like whether it's shiny, female, and it's form.
 impl Attributes {
+    /// Determine whether a pokemon should be shiny, based on a random rate (`DEFAULT_SHINY_RATE`).
+    ///
+    /// If the user specified that they want a shiny pokemon, then this function is irrelevant.
+    fn rate_is_shiny() -> bool {
+        let rate = match std::env::var("POKEGET_SHINY_RATE")
+            .map_err(|_| false)
+            .and_then(|x| x.parse::<u32>().map_err(|_| true))
+        {
+            Ok(rate) => rate.max(1), // No zero please
+            Err(should_notify) => {
+                if should_notify {
+                    eprintln!("POKEGET_SHINY_RATE was improperly formatted, using default rate")
+                }
+
+                DEFAULT_SHINY_RATE
+            }
+        };
+
+        0 == rand::thread_rng().gen_range(0..rate)
+    }
     /// Make a new [`Attributes`] by parsing the command line arguments.
     pub fn new(args: &Args) -> Self {
         let mut form = match args {
@@ -126,38 +148,10 @@ impl Attributes {
             form.push_str("-noble");
         }
 
-        let rate_env_var = "POKEGET_SHINY_RATE";
-        let default_rate = 8192.0;
-        let shiny_rate = match std::env::var(rate_env_var) {
-            Ok(rate) => match rate.parse::<f64>() {
-                Ok(value) => value,
-                Err(_) => {
-                    eprintln!(
-                        "Couldn't parse {rate_env_var} to f64, using default {default_rate}."
-                    );
-                    default_rate
-                }
-            },
-            Err(rate) => {
-                match rate {
-                    std::env::VarError::NotPresent => 8192.0,
-                    std::env::VarError::NotUnicode(_) => {
-                        eprintln!("Non Unicode data found in {rate_env_var}, using default {default_rate}.");
-                        default_rate
-                    }
-                }
-            }
-        };
-        let shiny = if let Some(set_shiny) = args.shiny {
-            set_shiny
-        } else {
-            rand::thread_rng().gen_bool(1.0 / shiny_rate)
-        };
-
         Self {
             form,
             female: args.female,
-            shiny,
+            shiny: args.shiny || Self::rate_is_shiny(),
         }
     }
 

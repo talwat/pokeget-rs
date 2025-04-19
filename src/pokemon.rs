@@ -2,7 +2,11 @@ use std::process::exit;
 
 use image::DynamicImage;
 
+use rand::Rng;
+
 use crate::{cli::Args, list::List, Data};
+
+const DEFAULT_SHINY_RATE: u32 = 8192;
 
 /// Enum used to assist parsing user input.
 ///
@@ -113,6 +117,26 @@ pub struct Attributes {
 
 /// Pokemon attribues, like whether it's shiny, female, and it's form.
 impl Attributes {
+    /// Determine whether a pokemon should be shiny, based on a random rate (`DEFAULT_SHINY_RATE`).
+    ///
+    /// If the user specified that they want a shiny pokemon, then this function is irrelevant.
+    fn rate_is_shiny() -> bool {
+        let rate = match std::env::var("POKEGET_SHINY_RATE")
+            .map_err(|_| false)
+            .and_then(|x| x.parse::<u32>().map_err(|_| true))
+        {
+            Ok(rate) => rate.max(1), // No zero please
+            Err(should_notify) => {
+                if should_notify {
+                    eprintln!("POKEGET_SHINY_RATE was improperly formatted, using default rate")
+                }
+
+                DEFAULT_SHINY_RATE
+            }
+        };
+
+        0 == rand::thread_rng().gen_range(0..rate)
+    }
     /// Make a new [`Attributes`] by parsing the command line arguments.
     pub fn new(args: &Args) -> Self {
         let mut form = match args {
@@ -134,7 +158,7 @@ impl Attributes {
         Self {
             form,
             female: args.female,
-            shiny: args.shiny,
+            shiny: args.shiny || Self::rate_is_shiny(),
         }
     }
 

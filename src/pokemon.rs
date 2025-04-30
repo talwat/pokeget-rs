@@ -8,6 +8,19 @@ use crate::{cli::Args, list::List, Data};
 
 const DEFAULT_SHINY_RATE: u32 = 8192;
 
+/// Enum used to store each region
+#[derive(PartialEq, Eq)]
+pub enum Region {
+    Kanto,
+    Johto,
+    Hoenn,
+    Sinnoh,
+    Unova,
+    Kalos,
+    Alola,
+    Galar,
+}
+
 /// Enum used to assist parsing user input.
 ///
 /// It can sort all types of inputs, and then evaluate them to a filename.
@@ -15,6 +28,9 @@ const DEFAULT_SHINY_RATE: u32 = 8192;
 pub enum Selection {
     /// When a random pokemon is selected (`0` or `random`).
     Random,
+
+    /// When a region is selected (e.g Kanto)
+    Region(Region),
 
     /// When a DexID is selected (number larger than 0).
     DexId(usize),
@@ -38,8 +54,16 @@ impl Selection {
                 _ => Selection::Name(arg),
             }
         } else {
-            match arg.as_str() {
+            match arg.to_lowercase().as_str() {
                 "random" => Selection::Random,
+                "kanto"  => Selection::Region(Region::Kanto),
+                "johto"  => Selection::Region(Region::Johto),
+                "hoenn"  => Selection::Region(Region::Hoenn),
+                "sinnoh"  => Selection::Region(Region::Sinnoh),
+                "unova" => Selection::Region(Region::Unova),
+                "kalos"  => Selection::Region(Region::Kalos),
+                "alola" => Selection::Region(Region::Alola),
+                "galar" => Selection::Region(Region::Galar),
                 _ => Selection::Name(arg),
             }
         }
@@ -49,6 +73,7 @@ impl Selection {
     pub fn eval(self, list: &List) -> String {
         match self {
             Selection::Random => list.random(),
+            Selection::Region(region) => list.get_by_region(region),
             Selection::DexId(id) => list
                 .get_by_id(id)
                 .unwrap_or_else(|| {
@@ -85,9 +110,10 @@ impl<'a> Pokemon<'a> {
     pub fn new(arg: String, list: &List, attributes: &'a Attributes) -> Self {
         let selection = Selection::parse(arg);
         let is_random = selection == Selection::Random;
+        let is_region = matches!(selection, Selection::Region(_));
         let name = selection.eval(list);
 
-        let path = attributes.path(&name, is_random);
+        let path = attributes.path(&name, is_random, is_region);
         let bytes = Data::get(&path)
             .unwrap_or_else(|| {
                 eprintln!("pokemon not found");
@@ -163,11 +189,12 @@ impl Attributes {
     }
 
     /// Formats the attributes and a filename from a [Selection] into a completed path.
-    pub fn path(&self, name: &str, random: bool) -> String {
+    pub fn path(&self, name: &str, random: bool, region: bool) -> String {
         let mut filename = name.to_owned();
 
-        // The form shouldn't be applied to random pokemon.
-        if !self.form.is_empty() && !random {
+        // The form shouldn't be applied to random or region pokemon.
+        let is_random = random || region;
+        if !self.form.is_empty() && !is_random {
             filename.push_str(&format!("-{}", self.form));
         }
 
@@ -180,11 +207,11 @@ impl Attributes {
         let path = format!(
             "{}/{}{}.png",
             if self.shiny { "shiny" } else { "regular" },
-            if self.female && !random {
+            if self.female && !is_random {
                 "female/"
             } else {
                 ""
-            }, // Random pokemon also shouldn't follow the female rule.
+            }, // Random or region pokemon also shouldn't follow the female rule.
             filename.trim()
         );
 

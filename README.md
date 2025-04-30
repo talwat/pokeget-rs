@@ -33,6 +33,10 @@ so using it on shell initialization is also not a very large bottleneck.
 
 `pokeget raichu sandslash meowth --alolan`
 
+#### Using regions
+
+`pokeget kanto`
+
 ## Installation
 
 ### Cargo *(recommended)*

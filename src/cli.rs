@@ -3,7 +3,7 @@ use clap::Parser;
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 pub struct Args {
-    /// The pokemon to display, use "random" to get a random pokemon
+    /// The pokemon to display, use "random" to get a random pokemon, use a region to get a random pokemon from that region
     pub pokemon: Vec<String>,
 
     /// Whether to hide the pokemon's name which appears above it

@@ -2,10 +2,10 @@
 
 use std::io::Cursor;
 
+use crate::pokemon::Region;
 use bimap::BiHashMap;
 use inflector::Inflector;
 use rand::Rng;
-use crate::pokemon::Region;
 
 /// A parsed representation of `names.csv`.
 ///

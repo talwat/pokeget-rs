@@ -56,12 +56,12 @@ impl Selection {
         } else {
             match arg.to_lowercase().as_str() {
                 "random" => Selection::Random,
-                "kanto"  => Selection::Region(Region::Kanto),
-                "johto"  => Selection::Region(Region::Johto),
-                "hoenn"  => Selection::Region(Region::Hoenn),
-                "sinnoh"  => Selection::Region(Region::Sinnoh),
+                "kanto" => Selection::Region(Region::Kanto),
+                "johto" => Selection::Region(Region::Johto),
+                "hoenn" => Selection::Region(Region::Hoenn),
+                "sinnoh" => Selection::Region(Region::Sinnoh),
                 "unova" => Selection::Region(Region::Unova),
-                "kalos"  => Selection::Region(Region::Kalos),
+                "kalos" => Selection::Region(Region::Kalos),
                 "alola" => Selection::Region(Region::Alola),
                 "galar" => Selection::Region(Region::Galar),
                 _ => Selection::Name(arg),

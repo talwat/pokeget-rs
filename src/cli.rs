@@ -54,7 +54,7 @@ pub struct Args {
     #[arg(long, default_value_t = false)]
     pub female: bool,
 
-    /// Center the pokemon in the terminal.
+    /// Center the pokemon in the terminal. Only works if output directly to terminal.
     #[arg(long, default_value_t = false)]
     pub center: bool,
 }

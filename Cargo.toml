@@ -19,6 +19,7 @@ strip = "symbols"
 
 [dependencies]
 Inflector = "0.11.4"
+ansi-width = "0.1.0"
 bimap = "0.6.3"
 clap = { version = "4.5.14", features = ["derive"] }
 csv = "1.3.0"
@@ -28,3 +29,4 @@ image = { version = "0.24.9", default-features = false, features = [
 rand = "0.8.5"
 rust-embed = { version = "8.5.0" }
 showie = "1.0.1"
+termion = "4.0.5"

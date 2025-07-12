@@ -53,4 +53,8 @@ pub struct Args {
     /// Display the female variant of the pokemon if it exists. This doesn't apply to nidoran, for some reason
     #[arg(long, default_value_t = false)]
     pub female: bool,
+
+    /// Center the pokemon in the terminal.
+    #[arg(long, default_value_t = false)]
+    pub center: bool,
 }

@@ -120,10 +120,28 @@ in small terminal windows, so there was little use in keeping them.
 
 ## Credits
 
-This time, the sprites are from [pokesprite](https://github.com/msikma/pokesprite) and pokeget uses them with a git submodule.
+This time, the sprites are from a forked repo of [pokesprite](https://github.com/cwalke6/pokesprite) and pokeget uses them with a git submodule.
+
+The original repo of pokesprite from msikma can be found [here](https://github.com/msikma/pokesprite)
+
+The Gen 9 sprites that were added were taken from bamq's [repository](https://github.com/bamq/pokemon-sprites) of pokemon sprites.
 
 Sprites are embedded into the binary, so pokeget won't download them. This is a good compromise,
 since while the binary may be large, pokeget can execute almost instantly and while offline.
+
+## Palden Sprites
+
+Here lists the work done and credit of original sprites for Paldea.
+Simply taking the prexisting sprites work from bamq [here](https://github.com/bamq/pokemon-sprites) and forking miskma's pokesprite repo [here](https://github.com/msikma/pokesprite).
+
+Then updating the submodule to have my forked repo of pokesprite.
+
+Then updating names.csv and pokemon.txt in order to have the names there for it to grab them.
+Then some small changes in the rust to add Paldea as a Region as well as change some values to hold.
+
+The only "problem" or thing to note for the future is that the gen9 sprites are still under pokemon-gen8 since I figured it would be easiest to just copy them there and not mess with any of the naming schematics.
+
+Thanks to CalOtter for logical help with this project.
 
 ## License
 

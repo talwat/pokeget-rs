@@ -31,3 +31,5 @@ Probably the easiest here and probably can be scripted. Just have to add the pok
 
 Scripting actually doesnt really make sese because I would have to type the code + All of the names of the pokemon.
 At that point I might as well just type the names of the pokemon into the file. If I already had them or could scrape them somehow then I would but typing manually is probably easier
+
+Funnily enough now that I look at it list.py was that script.

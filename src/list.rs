@@ -28,7 +28,7 @@ impl List {
             .has_headers(false)
             .from_reader(Cursor::new(FILE));
 
-        const CAPACITY: usize = 1000;
+        const CAPACITY: usize = 1100;
 
         let mut ids = BiHashMap::with_capacity(CAPACITY);
         let mut names = Vec::with_capacity(CAPACITY);
@@ -91,6 +91,7 @@ impl List {
             Region::Kalos => 650..=721,
             Region::Alola => 722..=809,
             Region::Galar => 810..=905,
+            Region::Paldea => 906..=1025,
         };
 
         let idx = rand.gen_range(region);

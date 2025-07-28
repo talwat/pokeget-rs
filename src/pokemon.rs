@@ -19,6 +19,7 @@ pub enum Region {
     Kalos,
     Alola,
     Galar,
+    Paldea
 }
 
 /// Enum used to assist parsing user input.
@@ -64,6 +65,7 @@ impl Selection {
                 "kalos" => Selection::Region(Region::Kalos),
                 "alola" => Selection::Region(Region::Alola),
                 "galar" => Selection::Region(Region::Galar),
+                "paldea" => Selection::Region(Region::Paldea),
                 _ => Selection::Name(arg),
             }
         }

@@ -39,25 +39,10 @@ so using it on shell initialization is also not a very large bottleneck.
 
 ## Installation
 
-### Cargo *(recommended)*
+### Git (Recommended)
 
-The recommended installation method is to use cargo:
-
-```sh
-cargo install pokeget
-```
-
-and making sure `$HOME/.cargo/bin` is added to `$PATH`.
-
-### AUR
-
-If you're on Arch, you can also use the AUR:
-
-```sh
-yay -S pokeget
-```
-
-### Git
+Since this is simply a forked repo of pokeget and not the main repo it can not be installed through yay or cargo.
+Instead you have to built it yourself with the instructions below.
 
 You can also clone the repository and compile manually by doing:
 

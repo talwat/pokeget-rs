@@ -47,7 +47,7 @@ Instead you have to built it yourself with the instructions below.
 You can also clone the repository and compile manually by doing:
 
 ```sh
-git clone --recurse-submodules https://github.com/talwat/pokeget-rs.git
+git clone --recurse-submodules https://github.com/cwalke6/pokeget-rs.git
 cd pokeget-rs
 cargo build --release
 mv target/release/pokeget ~/.local/bin

@@ -4,7 +4,6 @@ use std::io::Cursor;
 
 use crate::pokemon::Region;
 use bimap::BiHashMap;
-use inflector::Inflector;
 
 /// A parsed representation of `names.csv`.
 ///
@@ -52,13 +51,12 @@ impl List {
     /// assert_eq!(list.format_name("mr-mime"), "Mr. Mime")
     /// ```
     pub fn format_name(&self, filename: &str) -> String {
-        let raw_fmt = |x: &str| x.replace('-', " ").replace('\'', "").to_title_case();
-
         let Some(id) = self.ids.get_by_right(filename) else {
-            return raw_fmt(filename);
+            return filename.to_owned();
         };
+
         let Some(name) = self.names.get(*id) else {
-            return raw_fmt(filename);
+            return filename.to_owned();
         };
 
         name.clone()

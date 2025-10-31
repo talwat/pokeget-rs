@@ -4,7 +4,7 @@ use clap::Parser;
 use pokeget::cli::Args;
 use pokeget::list::List;
 use pokeget::pokemon::{Attributes, Pokemon};
-use pokeget::sprites::combine_sprites;
+use pokeget::sprites;
 use std::process::exit;
 
 fn main() {
@@ -23,13 +23,11 @@ fn main() {
         .map(|x| Pokemon::new(x, &list, &attributes))
         .collect();
 
-    let combined = combine_sprites(&pokemons);
-
+    let combined = sprites::combine(&pokemons);
     if !args.hide_name {
         let names: Vec<&str> = pokemons.iter().map(|x| x.name.as_ref()).collect();
-
         eprintln!("{}", names.join(", "));
     }
 
-    println!("{}", showie::to_ascii(&combined));
+    println!("{}", showie::render(&combined));
 }

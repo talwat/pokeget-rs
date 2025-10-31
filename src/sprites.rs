@@ -3,7 +3,7 @@ use image::{DynamicImage, GenericImage};
 use crate::pokemon::Pokemon;
 
 /// Combines several pokemon sprites into one by stitching them horizontally.
-pub fn combine_sprites(pokemons: &[Pokemon]) -> DynamicImage {
+pub fn combine(pokemons: &[Pokemon]) -> DynamicImage {
     let mut width: u32 = 0;
     let mut height: u32 = 0;
 

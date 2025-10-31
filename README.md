@@ -8,6 +8,14 @@ A better rust version of pokeget.
 
 For more info, run `pokeget --help`.
 
+## Project status
+
+I've decided that while I will keep fixing bugs and so on,
+no more sprites will be added or modified unless it is a serious
+issue. This is because firstly, pokemon is moving away from pixel
+sprites, and secondly, that pokesprite has ceased updates and a
+suitable alternative hasn't been found.
+
 ### .bashrc
 
 If you're using pokeget on shell startup, such as in `.bashrc`,
@@ -105,7 +113,6 @@ It will also draw the sprites 2x smaller by using half squares.
 ## What about other projects?
 
 pokeget-rs has an edge over projects like the old pokeget, pokeshell, etc... since it's in rust.
-
 It also is significantly (5.5x) faster than krabby which is another very similar project.
 
 For more info, go to [OTHER_PROJECTS.md](OTHER_PROJECTS.md).

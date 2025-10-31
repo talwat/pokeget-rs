@@ -5,7 +5,6 @@ use std::io::Cursor;
 use crate::pokemon::Region;
 use bimap::BiHashMap;
 use inflector::Inflector;
-use rand::Rng;
 
 /// A parsed representation of `names.csv`.
 ///
@@ -72,16 +71,12 @@ impl List {
 
     /// Gets a random pokemon & returns it's filename.
     pub fn random(&self) -> String {
-        let mut rand = rand::thread_rng();
-
-        let idx = rand.gen_range(0..self.ids.len());
+        let idx = rand::random_range(0..self.ids.len());
         self.ids.get_by_left(&idx).unwrap().clone()
     }
 
     /// Gets a random pokemon by region
     pub fn get_by_region(&self, region: Region) -> String {
-        let mut rand = rand::thread_rng();
-
         let region = match region {
             Region::Kanto => 0..=151,
             Region::Johto => 152..=251,
@@ -93,7 +88,7 @@ impl List {
             Region::Galar => 810..=905,
         };
 
-        let idx = rand.gen_range(region);
+        let idx = rand::random_range(region);
         self.ids.get_by_left(&idx).unwrap().clone()
     }
 }

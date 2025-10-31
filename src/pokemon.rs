@@ -1,8 +1,7 @@
 use std::process::exit;
 
 use image::DynamicImage;
-
-use rand::Rng;
+use showie::Trim;
 
 use crate::{cli::Args, list::List, Data};
 
@@ -122,13 +121,11 @@ impl<'a> Pokemon<'a> {
             .data
             .into_owned();
 
-        let img = image::load_from_memory(&bytes).unwrap();
-        let trimmed = showie::trim(&img);
-
+        let sprite = image::load_from_memory(&bytes).unwrap().trim();
         Self {
             path,
             name: list.format_name(&name),
-            sprite: trimmed,
+            sprite,
             attributes,
         }
     }
@@ -151,9 +148,9 @@ impl Attributes {
             .map_err(|_| false)
             .and_then(|x| x.parse::<u32>().map_err(|_| true))
         {
-            Ok(rate) => rate.max(1), // No zero please
-            Err(should_notify) => {
-                if should_notify {
+            Ok(rate) => rate.max(1),
+            Err(notify) => {
+                if notify {
                     eprintln!("POKEGET_SHINY_RATE was improperly formatted, using default rate")
                 }
 
@@ -161,7 +158,7 @@ impl Attributes {
             }
         };
 
-        0 == rand::thread_rng().gen_range(0..rate)
+        0 == rand::random_range(0..rate)
     }
     /// Make a new [`Attributes`] by parsing the command line arguments.
     pub fn new(args: &Args) -> Self {

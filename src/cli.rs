@@ -53,4 +53,8 @@ pub struct Args {
     /// Display the female variant of the pokemon if it exists. This doesn't apply to nidoran, for some reason
     #[arg(long, default_value_t = false)]
     pub female: bool,
+
+    /// Save the last pokemon's formatted name to ~/.config/pokeget/last-name
+    #[arg(long, default_value_t = false)]
+    pub save_last_name: bool,
 }

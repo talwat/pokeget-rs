@@ -29,5 +29,14 @@ fn main() {
         eprintln!("{}", names.join(", "));
     }
 
+    // Save the last pokemon's name if requested
+    if args.save_last_name {
+        if let Some(last_pokemon) = pokemons.last() {
+            if let Err(e) = List::save_last_name(&last_pokemon.name) {
+                eprintln!("Warning: Failed to save last name: {}", e);
+            }
+        }
+    }
+
     println!("{}", showie::render(&combined));
 }

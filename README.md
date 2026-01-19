@@ -1,3 +1,35 @@
+
+<div align="right">
+  <details>
+    <summary >🌐 Language</summary>
+    <div>
+      <div align="center">
+        <a href="https://openaitx.github.io/view.html?user=talwat&project=pokeget-rs&lang=en">English</a>
+        | <a href="https://openaitx.github.io/view.html?user=talwat&project=pokeget-rs&lang=zh-CN">简体中文</a>
+        | <a href="https://openaitx.github.io/view.html?user=talwat&project=pokeget-rs&lang=zh-TW">繁體中文</a>
+        | <a href="https://openaitx.github.io/view.html?user=talwat&project=pokeget-rs&lang=ja">日本語</a>
+        | <a href="https://openaitx.github.io/view.html?user=talwat&project=pokeget-rs&lang=ko">한국어</a>
+        | <a href="https://openaitx.github.io/view.html?user=talwat&project=pokeget-rs&lang=hi">हिन्दी</a>
+        | <a href="https://openaitx.github.io/view.html?user=talwat&project=pokeget-rs&lang=th">ไทย</a>
+        | <a href="https://openaitx.github.io/view.html?user=talwat&project=pokeget-rs&lang=fr">Français</a>
+        | <a href="https://openaitx.github.io/view.html?user=talwat&project=pokeget-rs&lang=de">Deutsch</a>
+        | <a href="https://openaitx.github.io/view.html?user=talwat&project=pokeget-rs&lang=es">Español</a>
+        | <a href="https://openaitx.github.io/view.html?user=talwat&project=pokeget-rs&lang=it">Italiano</a>
+        | <a href="https://openaitx.github.io/view.html?user=talwat&project=pokeget-rs&lang=ru">Русский</a>
+        | <a href="https://openaitx.github.io/view.html?user=talwat&project=pokeget-rs&lang=pt">Português</a>
+        | <a href="https://openaitx.github.io/view.html?user=talwat&project=pokeget-rs&lang=nl">Nederlands</a>
+        | <a href="https://openaitx.github.io/view.html?user=talwat&project=pokeget-rs&lang=pl">Polski</a>
+        | <a href="https://openaitx.github.io/view.html?user=talwat&project=pokeget-rs&lang=ar">العربية</a>
+        | <a href="https://openaitx.github.io/view.html?user=talwat&project=pokeget-rs&lang=fa">فارسی</a>
+        | <a href="https://openaitx.github.io/view.html?user=talwat&project=pokeget-rs&lang=tr">Türkçe</a>
+        | <a href="https://openaitx.github.io/view.html?user=talwat&project=pokeget-rs&lang=vi">Tiếng Việt</a>
+        | <a href="https://openaitx.github.io/view.html?user=talwat&project=pokeget-rs&lang=id">Bahasa Indonesia</a>
+        | <a href="https://openaitx.github.io/view.html?user=talwat&project=pokeget-rs&lang=as">অসমীয়া</
+      </div>
+    </div>
+  </details>
+</div>
+
 # pokeget-rs
 
 A better rust version of pokeget.
